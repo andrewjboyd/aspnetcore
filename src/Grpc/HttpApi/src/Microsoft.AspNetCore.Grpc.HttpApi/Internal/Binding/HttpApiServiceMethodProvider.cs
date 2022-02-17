@@ -9,7 +9,7 @@ using Grpc.Shared.Server;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Microsoft.AspNetCore.Grpc.HttpApi.Internal;
+namespace Microsoft.AspNetCore.Grpc.HttpApi.Internal.Binding;
 
 internal sealed class HttpApiServiceMethodProvider<TService> : IServiceMethodProvider<TService> where TService : class
 {

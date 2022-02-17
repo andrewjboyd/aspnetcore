@@ -1,6 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-
+#pragma warning disable IDE0073 // The file header does not match the required text
 #region Copyright notice and license
 // Protocol Buffers - Google's data interchange format
 // Copyright 2008 Google Inc.  All rights reserved.
@@ -32,6 +30,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endregion
+#pragma warning restore IDE0073 // The file header does not match the required text
 
 using System.Collections.Concurrent;
 using System.Globalization;
@@ -262,6 +261,104 @@ internal static class Legacy
                 builder.Append(nanos.ToString("d9", CultureInfo.InvariantCulture));
             }
         }
+    }
+
+    // Ported from src/google/protobuf/util/internal/utility.cc
+    internal static string ToSnakeCase(string text)
+    {
+        var builder = new StringBuilder(text.Length * 2);
+        // Note: this is probably unnecessary now, but currently retained to be as close as possible to the
+        // C++, whilst still throwing an exception on underscores.
+        bool wasNotUnderscore = false;  // Initialize to false for case 1 (below)
+        bool wasNotCap = false;
+
+        for (int i = 0; i < text.Length; i++)
+        {
+            char c = text[i];
+            if (c >= 'A' && c <= 'Z') // ascii_isupper
+            {
+                // Consider when the current character B is capitalized:
+                // 1) At beginning of input:   "B..." => "b..."
+                //    (e.g. "Biscuit" => "biscuit")
+                // 2) Following a lowercase:   "...aB..." => "...a_b..."
+                //    (e.g. "gBike" => "g_bike")
+                // 3) At the end of input:     "...AB" => "...ab"
+                //    (e.g. "GoogleLAB" => "google_lab")
+                // 4) Followed by a lowercase: "...ABc..." => "...a_bc..."
+                //    (e.g. "GBike" => "g_bike")
+                if (wasNotUnderscore &&               //            case 1 out
+                    (wasNotCap ||                     // case 2 in, case 3 out
+                     (i + 1 < text.Length &&         //            case 3 out
+                      (text[i + 1] >= 'a' && text[i + 1] <= 'z')))) // ascii_islower(text[i + 1])
+                {  // case 4 in
+                   // We add an underscore for case 2 and case 4.
+                    builder.Append('_');
+                }
+                // ascii_tolower, but we already know that c *is* an upper case ASCII character...
+                builder.Append((char)(c + 'a' - 'A'));
+                wasNotUnderscore = true;
+                wasNotCap = false;
+            }
+            else
+            {
+                builder.Append(c);
+                if (c == '_')
+                {
+                    throw new InvalidOperationException($"Invalid field mask: {text}");
+                }
+                wasNotUnderscore = true;
+                wasNotCap = true;
+            }
+        }
+        return builder.ToString();
+    }
+
+    internal static string ToJsonName(string name)
+    {
+        var result = new StringBuilder(name.Length);
+        var isNextUpperCase = false;
+        foreach (var ch in name)
+        {
+            if (ch == '_')
+            {
+                isNextUpperCase = true;
+            }
+            else if (isNextUpperCase)
+            {
+                result.Append(char.ToUpperInvariant(ch));
+                isNextUpperCase = false;
+            }
+            else
+            {
+                result.Append(ch);
+            }
+        }
+        return result.ToString();
+    }
+
+    /// <summary>
+    /// Checks whether the given path is valid for a field mask.
+    /// </summary>
+    /// <returns>true if the path is valid; false otherwise</returns>
+    internal static bool IsPathValid(string input)
+    {
+        for (var i = 0; i < input.Length; i++)
+        {
+            var c = input[i];
+            if (c >= 'A' && c <= 'Z')
+            {
+                return false;
+            }
+            if (c == '_' && i < input.Length - 1)
+            {
+                var next = input[i + 1];
+                if (next < 'a' || next > 'z')
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     // Effectively a cache of mapping from enum values to the original name as specified in the proto file,

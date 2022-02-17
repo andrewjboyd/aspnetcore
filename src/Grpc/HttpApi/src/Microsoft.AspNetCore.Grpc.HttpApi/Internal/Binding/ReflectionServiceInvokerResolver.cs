@@ -6,7 +6,7 @@ using Google.Api;
 using Google.Protobuf.Reflection;
 using Microsoft.AspNetCore.Routing;
 
-namespace Microsoft.AspNetCore.Grpc.HttpApi.Internal;
+namespace Microsoft.AspNetCore.Grpc.HttpApi.Internal.Binding;
 
 internal class ReflectionServiceInvokerResolver<TService>
     : IServiceInvokerResolver<TService> where TService : class

@@ -4,7 +4,7 @@
 using Google.Api;
 using Google.Protobuf.Reflection;
 
-namespace Microsoft.AspNetCore.Grpc.HttpApi.Internal;
+namespace Microsoft.AspNetCore.Grpc.HttpApi.Internal.Binding;
 
 internal interface IServiceInvokerResolver<TService> where TService : class
 {

@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Routing.Patterns;
 using Microsoft.Extensions.Logging;
 using MethodOptions = global::Grpc.Shared.Server.MethodOptions;
 
-namespace Microsoft.AspNetCore.Grpc.HttpApi.Internal;
+namespace Microsoft.AspNetCore.Grpc.HttpApi.Internal.Binding;
 
 internal sealed class HttpApiProviderServiceBinder<TService> : ServiceBinderBase where TService : class
 {
