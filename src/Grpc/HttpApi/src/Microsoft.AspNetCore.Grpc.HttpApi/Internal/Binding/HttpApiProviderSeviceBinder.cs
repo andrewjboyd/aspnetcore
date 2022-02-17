@@ -224,7 +224,7 @@ internal sealed class HttpApiProviderServiceBinder<TService> : ServiceBinderBase
         {
             // This validation is consistent with grpc-gateway code generation.
             // We should match their validation to be a good member of the eco-system.
-            throw new InvalidOperationException($"Path template must start with /: {pattern}");
+            throw new InvalidOperationException($"Path template '{pattern}' must start with a '/'.");
         }
 
         var routePattern = RoutePatternFactory.Parse(pattern);
