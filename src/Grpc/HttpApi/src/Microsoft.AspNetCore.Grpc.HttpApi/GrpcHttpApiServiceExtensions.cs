@@ -3,7 +3,7 @@
 
 using Grpc.AspNetCore.Server.Model;
 using Microsoft.AspNetCore.Grpc.HttpApi;
-using Microsoft.AspNetCore.Grpc.HttpApi.Internal;
+using Microsoft.AspNetCore.Grpc.HttpApi.Internal.Binding;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Microsoft.Extensions.DependencyInjection;
