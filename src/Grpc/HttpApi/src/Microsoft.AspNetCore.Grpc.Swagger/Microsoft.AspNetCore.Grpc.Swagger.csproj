@@ -8,7 +8,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <TargetFramework>$(DefaultNetCoreTargetFramework)</TargetFramework>
 
-    <RestoreAdditionalProjectSources>$(RestoreAdditionalProjectSources);$(ArtifactsShippingPackagesDir)</RestoreAdditionalProjectSources>
+    <!-- Required because Grpc.AspNetCore.Server uses shared runtime -->
     <UseAspNetCoreSharedRuntime>true</UseAspNetCoreSharedRuntime>
   </PropertyGroup>
 
