@@ -6,7 +6,7 @@ using Grpc.Core;
 
 namespace Microsoft.AspNetCore.Grpc.HttpApi.Internal;
 
-internal class HttpContextStreamWriter<TResponse> : IServerStreamWriter<TResponse>
+internal sealed class HttpContextStreamWriter<TResponse> : IServerStreamWriter<TResponse>
     where TResponse : class
 {
     private readonly HttpApiServerCallContext _context;

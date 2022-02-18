@@ -17,7 +17,7 @@ using MethodOptions = global::Grpc.Shared.Server.MethodOptions;
 
 namespace Microsoft.AspNetCore.Grpc.HttpApi.Internal.Binding;
 
-internal sealed class HttpApiProviderServiceBinder<TService> : ServiceBinderBase where TService : class
+internal sealed partial class HttpApiProviderServiceBinder<TService> : ServiceBinderBase where TService : class
 {
     private delegate (RequestDelegate RequestDelegate, List<object> Metadata) CreateRequestDelegate<TRequest, TResponse>(
         Method<TRequest, TResponse> method,
@@ -271,22 +271,12 @@ internal sealed class HttpApiProviderServiceBinder<TService> : ServiceBinderBase
         return false;
     }
 
-    private static class Log
+    private static partial class Log
     {
-        private static readonly Action<ILogger, string, Type, Exception?> _streamingMethodNotSupported =
-            LoggerMessage.Define<string, Type>(LogLevel.Warning, new EventId(1, "StreamingMethodNotSupported"), "Unable to bind {MethodName} on {ServiceType} to HTTP API. Streaming methods are not supported.");
+        [LoggerMessage(1, LogLevel.Warning, "Unable to bind {MethodName} on {ServiceType} to HTTP API. Streaming methods are not supported.", EventName = "StreamingMethodNotSupported")]
+        public static partial void StreamingMethodNotSupported(ILogger logger, string methodName, Type serviceType);
 
-        private static readonly Action<ILogger, string, Type, Exception?> _methodDescriptorNotFound =
-            LoggerMessage.Define<string, Type>(LogLevel.Warning, new EventId(2, "MethodDescriptorNotFound"), "Unable to find method descriptor for {MethodName} on {ServiceType}.");
-
-        public static void StreamingMethodNotSupported(ILogger logger, string methodName, Type serviceType)
-        {
-            _streamingMethodNotSupported(logger, methodName, serviceType, null);
-        }
-
-        public static void MethodDescriptorNotFound(ILogger logger, string methodName, Type serviceType)
-        {
-            _methodDescriptorNotFound(logger, methodName, serviceType, null);
-        }
+        [LoggerMessage(2, LogLevel.Warning, "Unable to find method descriptor for {MethodName} on {ServiceType}.", EventName = "MethodDescriptorNotFound")]
+        public static partial void MethodDescriptorNotFound(ILogger logger, string methodName, Type serviceType);
     }
 }

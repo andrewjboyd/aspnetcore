@@ -6,95 +6,38 @@ using Microsoft.Extensions.Logging;
 
 namespace Microsoft.AspNetCore.Grpc.HttpApi.Internal;
 
-// TODO - Convert to use logging source generator
-// TODO - Update event ids
-internal static class GrpcServerLog
+internal static partial class GrpcServerLog
 {
-    private static readonly Action<ILogger, string?, Exception?> _unsupportedRequestContentType =
-        LoggerMessage.Define<string?>(LogLevel.Information, new EventId(2, "UnsupportedRequestContentType"), "Request content-type of '{ContentType}' is not supported.");
+    [LoggerMessage(1, LogLevel.Information, "Request content-type of '{ContentType}' is not supported.", EventName = "UnsupportedRequestContentType")]
+    public static partial void UnsupportedRequestContentType(ILogger logger, string? contentType);
 
-    private static readonly Action<ILogger, string, Exception?> _errorExecutingServiceMethod =
-        LoggerMessage.Define<string>(LogLevel.Error, new EventId(6, "ErrorExecutingServiceMethod"), "Error when executing service method '{ServiceMethod}'.");
+    [LoggerMessage(2, LogLevel.Error, "Error when executing service method '{ServiceMethod}'.", EventName = "ErrorExecutingServiceMethod")]
+    public static partial void ErrorExecutingServiceMethod(ILogger logger, string serviceMethod, Exception ex);
 
-    private static readonly Action<ILogger, StatusCode, string, Exception?> _rpcConnectionError =
-        LoggerMessage.Define<StatusCode, string>(LogLevel.Information, new EventId(7, "RpcConnectionError"), "Error status code '{StatusCode}' with detail '{Detail}' raised.");
+    [LoggerMessage(3, LogLevel.Information, "Error status code '{StatusCode}' with detail '{Detail}' raised.", EventName = "RpcConnectionError")]
+    public static partial void RpcConnectionError(ILogger logger, StatusCode statusCode, string detail);
 
-    private static readonly Action<ILogger, Exception?> _readingMessage =
-        LoggerMessage.Define(LogLevel.Debug, new EventId(10, "ReadingMessage"), "Reading message.");
+    [LoggerMessage(4, LogLevel.Debug, "Reading message.", EventName = "ReadingMessage")]
+    public static partial void ReadingMessage(ILogger logger);
 
-    private static readonly Action<ILogger, Type, Exception?> _deserializingMessage =
-        LoggerMessage.Define<Type>(LogLevel.Trace, new EventId(12, "DeserializingMessage"), "Deserializing to '{MessageType}'.");
+    [LoggerMessage(5, LogLevel.Trace, "Deserializing to '{MessageType}'.", EventName = "DeserializingMessage")]
+    public static partial void DeserializingMessage(ILogger logger, Type messageType);
 
-    private static readonly Action<ILogger, Exception?> _receivedMessage =
-        LoggerMessage.Define(LogLevel.Trace, new EventId(13, "ReceivedMessage"), "Received message.");
+    [LoggerMessage(6, LogLevel.Trace, "Received message.", EventName = "ReceivedMessage")]
+    public static partial void ReceivedMessage(ILogger logger);
 
-    private static readonly Action<ILogger, Exception?> _errorReadingMessage =
-        LoggerMessage.Define(LogLevel.Information, new EventId(14, "ErrorReadingMessage"), "Error reading message.");
+    [LoggerMessage(7, LogLevel.Information, "Error reading message.", EventName = "ErrorReadingMessage")]
+    public static partial void ErrorReadingMessage(ILogger logger, Exception ex);
 
-    private static readonly Action<ILogger, Exception?> _sendingMessage =
-        LoggerMessage.Define(LogLevel.Debug, new EventId(15, "SendingMessage"), "Sending message.");
+    [LoggerMessage(8, LogLevel.Debug, "Sending message.", EventName = "SendingMessage")]
+    public static partial void SendingMessage(ILogger logger);
 
-    private static readonly Action<ILogger, Exception?> _messageSent =
-        LoggerMessage.Define(LogLevel.Trace, new EventId(16, "MessageSent"), "Message sent.");
+    [LoggerMessage(9, LogLevel.Debug, "Message sent.", EventName = "MessageSent")]
+    public static partial void MessageSent(ILogger logger);
 
-    private static readonly Action<ILogger, Exception?> _errorSendingMessage =
-        LoggerMessage.Define(LogLevel.Information, new EventId(17, "ErrorSendingMessage"), "Error sending message.");
+    [LoggerMessage(10, LogLevel.Information, "Error sending message.", EventName = "ErrorSendingMessage")]
+    public static partial void ErrorSendingMessage(ILogger logger, Exception ex);
 
-    private static readonly Action<ILogger, Type, Exception?> _serializedMessage =
-        LoggerMessage.Define<Type>(LogLevel.Trace, new EventId(18, "SerializedMessage"), "Serialized '{MessageType}'.");
-
-    public static void ErrorExecutingServiceMethod(ILogger logger, string serviceMethod, Exception ex)
-    {
-        _errorExecutingServiceMethod(logger, serviceMethod, ex);
-    }
-
-    public static void RpcConnectionError(ILogger logger, StatusCode statusCode, string detail)
-    {
-        _rpcConnectionError(logger, statusCode, detail, null);
-    }
-
-    public static void UnsupportedRequestContentType(ILogger logger, string? contentType)
-    {
-        _unsupportedRequestContentType(logger, contentType, null);
-    }
-
-    public static void ReadingMessage(ILogger logger)
-    {
-        _readingMessage(logger, null);
-    }
-
-    public static void DeserializingMessage(ILogger logger, Type messageType)
-    {
-        _deserializingMessage(logger, messageType, null);
-    }
-
-    public static void ReceivedMessage(ILogger logger)
-    {
-        _receivedMessage(logger, null);
-    }
-
-    public static void ErrorReadingMessage(ILogger logger, Exception ex)
-    {
-        _errorReadingMessage(logger, ex);
-    }
-
-    public static void SendingMessage(ILogger logger)
-    {
-        _sendingMessage(logger, null);
-    }
-
-    public static void MessageSent(ILogger logger)
-    {
-        _messageSent(logger, null);
-    }
-
-    public static void ErrorSendingMessage(ILogger logger, Exception ex)
-    {
-        _errorSendingMessage(logger, ex);
-    }
-
-    public static void SerializedMessage(ILogger logger, Type messageType)
-    {
-        _serializedMessage(logger, messageType, null);
-    }
+    [LoggerMessage(11, LogLevel.Trace, "Serialized '{MessageType}'.", EventName = "SerializedMessage")]
+    public static partial void SerializedMessage(ILogger logger, Type messageType);
 }

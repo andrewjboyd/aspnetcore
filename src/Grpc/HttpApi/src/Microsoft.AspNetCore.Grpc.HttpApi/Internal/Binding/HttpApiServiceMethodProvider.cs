@@ -11,7 +11,7 @@ using Microsoft.Extensions.Options;
 
 namespace Microsoft.AspNetCore.Grpc.HttpApi.Internal.Binding;
 
-internal sealed class HttpApiServiceMethodProvider<TService> : IServiceMethodProvider<TService> where TService : class
+internal sealed partial class HttpApiServiceMethodProvider<TService> : IServiceMethodProvider<TService> where TService : class
 {
     private readonly ILogger<HttpApiServiceMethodProvider<TService>> _logger;
     private readonly GrpcServiceOptions _globalOptions;
@@ -87,22 +87,12 @@ internal sealed class HttpApiServiceMethodProvider<TService> : IServiceMethodPro
         }
     }
 
-    private static class Log
+    private static partial class Log
     {
-        private static readonly Action<ILogger, Type, Exception?> _bindMethodNotFound =
-            LoggerMessage.Define<Type>(LogLevel.Warning, new EventId(1, "BindMethodNotFound"), "Could not find bind method for {ServiceType}.");
+        [LoggerMessage(1, LogLevel.Warning, "Could not find bind method for {ServiceType}.", EventName = "BindMethodNotFound")]
+        public static partial void BindMethodNotFound(ILogger logger, Type serviceType);
 
-        private static readonly Action<ILogger, Type, Exception> _serviceDescriptorError =
-            LoggerMessage.Define<Type>(LogLevel.Warning, new EventId(2, "ServiceDescriptorError"), "Error getting service descriptor for {ServiceType}.");
-
-        public static void BindMethodNotFound(ILogger logger, Type serviceType)
-        {
-            _bindMethodNotFound(logger, serviceType, null);
-        }
-
-        public static void ServiceDescriptorError(ILogger logger, Type serviceType, Exception ex)
-        {
-            _serviceDescriptorError(logger, serviceType, ex);
-        }
+        [LoggerMessage(2, LogLevel.Warning, "Error getting service descriptor for {ServiceType}.", EventName = "ServiceDescriptorError")]
+        public static partial void ServiceDescriptorError(ILogger logger, Type serviceType, Exception ex);
     }
 }
