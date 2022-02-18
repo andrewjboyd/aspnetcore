@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Routing;
 
 namespace Microsoft.AspNetCore.Grpc.HttpApi.Internal.Binding;
 
-internal class ReflectionServiceInvokerResolver<TService>
+internal sealed class ReflectionServiceInvokerResolver<TService>
     : IServiceInvokerResolver<TService> where TService : class
 {
     private readonly Type _declaringType;

@@ -186,13 +186,13 @@ internal static class JsonRequestHelpers
 
                         // TODO: JsonSerializer currently doesn't support deserializing values onto an existing object or collection.
                         // Either update this to use new functionality in JsonSerializer or improve work-around perf.
-                        var type = JsonConverterHelper.GetFieldType(serverCallContext.DescriptorInfo.BodyFieldDescriptors!.Last());
+                        var type = JsonConverterHelper.GetFieldType(serverCallContext.DescriptorInfo.BodyFieldDescriptors.Last());
                         var listType = typeof(List<>).MakeGenericType(type);
 
                         GrpcServerLog.DeserializingMessage(serverCallContext.Logger, listType);
                         var repeatedContent = (IList)(await JsonSerializer.DeserializeAsync(stream, listType, serializerOptions))!;
 
-                        ServiceDescriptorHelpers.RecursiveSetValue(requestMessage, serverCallContext.DescriptorInfo.BodyFieldDescriptors!, repeatedContent);
+                        ServiceDescriptorHelpers.RecursiveSetValue(requestMessage, serverCallContext.DescriptorInfo.BodyFieldDescriptors, repeatedContent);
                     }
                     else
                     {

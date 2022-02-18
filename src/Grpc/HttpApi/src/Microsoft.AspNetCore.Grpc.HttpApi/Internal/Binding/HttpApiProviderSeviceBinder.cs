@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using Google.Api;
 using Google.Protobuf.Reflection;
 using Grpc.AspNetCore.Server;
@@ -258,8 +257,18 @@ internal sealed class HttpApiProviderServiceBinder<TService> : ServiceBinderBase
 
     private bool TryGetMethodDescriptor(string methodName, [NotNullWhen(true)]out MethodDescriptor? methodDescriptor)
     {
-        methodDescriptor = _serviceDescriptor.Methods.SingleOrDefault(m => m.Name == methodName);
-        return (methodDescriptor != null);
+        for (var i = 0; i < _serviceDescriptor.Methods.Count; i++)
+        {
+            var method = _serviceDescriptor.Methods[i];
+            if (method.Name == methodName)
+            {
+                methodDescriptor = method;
+                return true;
+            }
+        }
+
+        methodDescriptor = null;
+        return false;
     }
 
     private static class Log
