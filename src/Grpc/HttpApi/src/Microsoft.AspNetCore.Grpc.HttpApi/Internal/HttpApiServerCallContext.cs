@@ -78,7 +78,7 @@ internal sealed class HttpApiServerCallContext : ServerCallContext, IServerCallC
                 case AddressFamily.InterNetwork:
                     return $"ipv4:{connection.RemoteIpAddress}:{connection.RemotePort}";
                 case AddressFamily.InterNetworkV6:
-                    return $"ipv6:[{connection.RemoteIpAddress}:{connection.RemotePort}";
+                    return $"ipv6:[{connection.RemoteIpAddress}]:{connection.RemotePort}";
                 default:
                     // TODO(JamesNK) - Test what should be output when used with UDS and named pipes
                     return $"unknown:{connection.RemoteIpAddress}:{connection.RemotePort}";

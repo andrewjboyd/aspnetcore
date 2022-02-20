@@ -3,7 +3,6 @@
   <PropertyGroup>
     <Description>HTTP API for gRPC ASP.NET Core</Description>
     <PackageTags>gRPC RPC HTTP/2 REST</PackageTags>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <TargetFramework>$(DefaultNetCoreTargetFramework)</TargetFramework>
 
     <!-- Required because Grpc.AspNetCore.Server uses shared runtime -->

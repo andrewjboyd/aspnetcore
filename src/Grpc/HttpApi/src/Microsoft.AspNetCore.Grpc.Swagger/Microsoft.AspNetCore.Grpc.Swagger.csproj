@@ -3,12 +3,9 @@
   <PropertyGroup>
     <Description>Swagger for gRPC ASP.NET Core</Description>
     <PackageTags>gRPC RPC HTTP/2 REST Swagger OpenAPI</PackageTags>
-    <IsPackable>true</IsPackable>
-    <IsShipping>true</IsShipping>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <TargetFramework>$(DefaultNetCoreTargetFramework)</TargetFramework>
 
-    <!-- Required because Grpc.AspNetCore.Server uses shared runtime -->
+    <!-- Required because Swashbuckle.AspNetCore uses shared runtime -->
     <UseAspNetCoreSharedRuntime>true</UseAspNetCoreSharedRuntime>
   </PropertyGroup>
 
