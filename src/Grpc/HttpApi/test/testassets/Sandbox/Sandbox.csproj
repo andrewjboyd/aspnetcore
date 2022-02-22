@@ -10,11 +10,8 @@
     <Protobuf Include="httpapi.proto" GrpcServices="Server" />
 
     <Reference Include="Grpc.AspNetCore" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Microsoft.AspNetCore.Grpc.HttpApi\Microsoft.AspNetCore.Grpc.HttpApi.csproj" />
-    <ProjectReference Include="..\..\..\src\Microsoft.AspNetCore.Grpc.Swagger\Microsoft.AspNetCore.Grpc.Swagger.csproj" />
+    <Reference Include="Microsoft.AspNetCore.Grpc.HttpApi" />
+    <Reference Include="Microsoft.AspNetCore.Grpc.Swagger" />
   </ItemGroup>
 
 </Project>

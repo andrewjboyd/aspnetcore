@@ -12,10 +12,7 @@
 
   <ItemGroup>
     <Reference Include="Grpc.AspNetCore" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Microsoft.AspNetCore.Grpc.HttpApi\Microsoft.AspNetCore.Grpc.HttpApi.csproj" />
+    <Reference Include="Microsoft.AspNetCore.Grpc.HttpApi" />
   </ItemGroup>
 
 </Project>

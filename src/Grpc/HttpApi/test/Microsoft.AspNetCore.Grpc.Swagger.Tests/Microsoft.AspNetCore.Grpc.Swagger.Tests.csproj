@@ -15,8 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Microsoft.AspNetCore.Grpc.Swagger\Microsoft.AspNetCore.Grpc.Swagger.csproj" />
-
+    <Reference Include="Microsoft.AspNetCore.Grpc.Swagger" />
     <Reference Include="Grpc.Tools" PrivateAssets="All" />
   </ItemGroup>
 

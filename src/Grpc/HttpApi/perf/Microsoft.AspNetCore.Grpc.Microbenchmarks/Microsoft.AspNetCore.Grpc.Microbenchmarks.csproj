@@ -7,16 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Microsoft.AspNetCore.Grpc.HttpApi\Microsoft.AspNetCore.Grpc.HttpApi.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Protobuf Include=".\Proto\chat.proto" GrpcServices="Server" />
     <Protobuf Include=".\Proto\greet.proto" GrpcServices="Client" />
 
     <Reference Include="BenchmarkDotNet" />
     <Reference Include="Google.Protobuf" />
     <Reference Include="Grpc.Tools" PrivateAssets="All" />
+    <Reference Include="Microsoft.AspNetCore.Grpc.HttpApi" />
   </ItemGroup>
 
 </Project>

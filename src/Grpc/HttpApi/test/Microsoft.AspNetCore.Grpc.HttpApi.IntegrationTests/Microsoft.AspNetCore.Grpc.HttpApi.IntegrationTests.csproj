@@ -11,10 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Microsoft.AspNetCore.Grpc.HttpApi\Microsoft.AspNetCore.Grpc.HttpApi.csproj" />
     <ProjectReference Include="..\testassets\IntegrationTestsWebsite\IntegrationTestsWebsite.csproj" />
 
     <Reference Include="Microsoft.AspNetCore.TestHost" />
+    <Reference Include="Microsoft.AspNetCore.Grpc.HttpApi" />
     <Reference Include="Grpc.Tools" PrivateAssets="All" />
   </ItemGroup>
 

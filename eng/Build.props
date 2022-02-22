@@ -228,6 +228,7 @@
                           $(RepoRoot)src\HealthChecks\**\src\*.csproj;
                           $(RepoRoot)src\Testing\**\src\*.csproj;
                           $(RepoRoot)src\Extensions\**\src\*.csproj;
+                          $(RepoRoot)src\Grpc\HttpApi\src\**\*.csproj;
                           "
                         Exclude="
                           @(ProjectToBuild);
