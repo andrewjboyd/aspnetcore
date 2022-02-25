@@ -90,13 +90,17 @@ internal sealed class Http2HeadersEnumerator : IEnumerator<KeyValuePair<string, 
         else
         {
             return _genericEnumerator!.MoveNext()
-                ? SetCurrent(_genericEnumerator.Current.Key, _genericEnumerator.Current.Value, ZZGetKnownHeaderType(_genericEnumerator.Current.Key))
+                ? SetCurrent(_genericEnumerator.Current.Key, _genericEnumerator.Current.Value, GetKnownRequestHeaderType(_genericEnumerator.Current.Key))
                 : false;
         }
     }
 
-    private static KnownHeaderType ZZGetKnownHeaderType(string headerName)
+    private static KnownHeaderType GetKnownRequestHeaderType(string headerName)
     {
+#if DEBUG
+        // Include request headers for local development. This allows request headers to be sent as static headers.
+        // Could potentially cause different test results in DEBUG vs RELEASE.
+        // Consider whether there is a better way to do this.
         switch (headerName)
         {
             case ":method":
@@ -104,6 +108,9 @@ internal sealed class Http2HeadersEnumerator : IEnumerator<KeyValuePair<string, 
             default:
                 return default;
         }
+#else
+        return default;
+#endif
     }
 
     private bool MoveNextOnStringEnumerator(string key)
@@ -160,8 +167,6 @@ internal sealed class Http2HeadersEnumerator : IEnumerator<KeyValuePair<string, 
         // Removed from this test are request-only headers, e.g. cookie.
         switch (responseHeaderType)
         {
-            case KnownHeaderType.Method:
-                return H2StaticTable.MethodGet;
             case KnownHeaderType.CacheControl:
                 return H2StaticTable.CacheControl;
             case KnownHeaderType.Date:
@@ -212,6 +217,13 @@ internal sealed class Http2HeadersEnumerator : IEnumerator<KeyValuePair<string, 
                 return H2StaticTable.ContentLength;
             default:
                 return -1;
+#if DEBUG
+            // Include request headers for local development. This allows request headers to be sent as static headers.
+            // Could potentially cause different test results in DEBUG vs RELEASE.
+            // Consider whether there is a better way to do this.
+            case KnownHeaderType.Method:
+                return H2StaticTable.MethodGet;
+#endif
         }
     }
 }

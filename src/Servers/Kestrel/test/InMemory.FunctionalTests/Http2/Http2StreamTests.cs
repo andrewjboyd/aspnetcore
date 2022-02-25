@@ -120,7 +120,7 @@ public class Http2StreamTests : Http2TestBase
         Assert.Equal(method, _decodedHeaders["Method"]);
         _decodedHeaders.Clear();
 
-        // Second request (will send dynamic table indexes)
+        // Second request (will use dynamic table indexes)
         await StartStreamAsync(3, headers, endStream: true);
 
         var headersFrame2 = await ExpectAsync(Http2FrameType.HEADERS,
