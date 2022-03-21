@@ -66,11 +66,21 @@ public partial class SystemTextJsonInputFormatter : TextInputFormatter, IInputFo
 
         var httpContext = context.HttpContext;
         var (inputStream, usesTranscodingStream) = GetInputStream(httpContext, encoding);
+        var serializerOptionsToUse = SerializerOptions;
+        var jsonSerializerOptionsAttributes = context.ModelType.GetCustomAttributes(typeof(JsonSerializerOptionsAttribute), false);
+        if (jsonSerializerOptionsAttributes.Length == 1)
+        {
+            serializerOptionsToUse = ((JsonSerializerOptionsAttribute)jsonSerializerOptionsAttributes[0]).JsonSerializerOptions;
+        }
+        else if (jsonSerializerOptionsAttributes.Length > 1)
+        {
+            throw new InvalidOperationException($"Too many {nameof(JsonSerializerOptionsAttribute)} attributes on {context.ModelType.Name}");
+        }
 
         object? model;
         try
         {
-            model = await JsonSerializer.DeserializeAsync(inputStream, context.ModelType, SerializerOptions);
+            model = await JsonSerializer.DeserializeAsync(inputStream, context.ModelType, serializerOptionsToUse);
         }
         catch (JsonException jsonException)
         {

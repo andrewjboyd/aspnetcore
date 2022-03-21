@@ -73,13 +73,23 @@ public class SystemTextJsonOutputFormatter : TextOutputFormatter
         // we want to serialize all the properties on the derived type. This keeps parity with
         // the behavior you get when the user does not declare the return type and with Json.Net at least at the top level.
         var objectType = context.Object?.GetType() ?? context.ObjectType ?? typeof(object);
+        var serializerOptionsToUse = SerializerOptions;
+        var jsonSerializerOptionsAttributes = objectType.GetCustomAttributes(typeof(JsonSerializerOptionsAttribute), false);
+        if (jsonSerializerOptionsAttributes.Length == 1)
+        {
+            serializerOptionsToUse = ((JsonSerializerOptionsAttribute)jsonSerializerOptionsAttributes[0]).JsonSerializerOptions;
+        }
+        else if (jsonSerializerOptionsAttributes.Length > 1)
+        {
+            throw new InvalidOperationException($"Too many {nameof(JsonSerializerOptionsAttribute)} attributes on {objectType.Name}");
+        }
 
         var responseStream = httpContext.Response.Body;
         if (selectedEncoding.CodePage == Encoding.UTF8.CodePage)
         {
             try
             {
-                await JsonSerializer.SerializeAsync(responseStream, context.Object, objectType, SerializerOptions, httpContext.RequestAborted);
+                await JsonSerializer.SerializeAsync(responseStream, context.Object, objectType, serializerOptionsToUse, httpContext.RequestAborted);
                 await responseStream.FlushAsync(httpContext.RequestAborted);
             }
             catch (OperationCanceledException) when (context.HttpContext.RequestAborted.IsCancellationRequested) { }
@@ -93,7 +103,7 @@ public class SystemTextJsonOutputFormatter : TextOutputFormatter
             ExceptionDispatchInfo? exceptionDispatchInfo = null;
             try
             {
-                await JsonSerializer.SerializeAsync(transcodingStream, context.Object, objectType, SerializerOptions);
+                await JsonSerializer.SerializeAsync(transcodingStream, context.Object, objectType, serializerOptionsToUse);
                 await transcodingStream.FlushAsync();
             }
             catch (Exception ex)
